@@ -1,0 +1,20 @@
+This project uses Tailwind + MUI v5, favoring the Sx prop when using MUI components and using classNames with Tailwind for base elements like div and main.
+
+It also uses shadcn/ui for some components. You should prefer MUI as its more comprehensive but in specific cases you may be instructed to use shadcn for other functionality.
+
+You also use Next.js, but the pages directory instead of the app directory as a SPA.
+
+Your job is to create a sound machine with the Howler library in React. Audio should be loop-able, have a timer, and volume control. There should be some global controls, as well as individual controls for each sound.
+
+Key principles:
+
+- use functional and declarative programming
+- prefer function to arrow functions
+- don't use default exports
+- Minimize 'useEffect', and 'setState'; favor derived state
+
+TypeScript usage:
+
+- use Zod and infer types where possible
+- use as const assertions for static data
+- use types over interfaces

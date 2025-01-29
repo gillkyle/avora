@@ -1,40 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Sound Machine
 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+TODOs
+• bootstrap Next.js app npx create-next-app@latest
+• set up shadcn npx shadcn@latest init
+• install a couple relevant packages I'll probably need: npm install jotai howler react-icons framer-motion zod parse-duration ts-pattern @mui/material @emotion/react @emotion/styled
+• set up the MUI theme provider (in src/theme?..)
+• grab some assets I'll need and drop in the public folder
+• layout the homepage, navbar, content, control bar
+• navbar is just logo + name
+• content is mainly just a form + some decorative stuff
+• control bar is a play button, a timer, and a button to open the sound control panel
+• add a centered <Form /> that is a single text input with a submit button
+• parse in 2 directions, 1 with parse-duration to get time for a timer, if it returns NULL keep the timer off
+• 1 with parsing from sound machines, if any keywords match then turn them on at 50% volume
+• possibly parse numbers into volumes
+• add sound sliders in a dialog from the control bar
+• Build a couple components:
+• useAudioPlayer
+• useGlobalAudioPlayer
+• sounds.tsx
+• SoundSlider.tsx
+• Timer.tsx
+• useInterval
+• generate some landing pages for Programmatic SEO?..
+• \_**\_ sounds for babies
+• \_\_** sounds to fall asleep

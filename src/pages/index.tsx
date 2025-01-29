@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { ControlBar } from "~/components/ControlBar";
 import { SoundSlider } from "~/components/SoundSlider";
+import { ALL_SOUNDS_LIST } from "~/data/sounds";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,11 +35,14 @@ export default function Home() {
             Submit
           </button>
         </form>
-        <SoundSlider
-          soundUrl="/sounds/brown-noise.mp3"
-          color="red"
-          label="Background"
-        />
+        {ALL_SOUNDS_LIST.map((sound) => (
+          <SoundSlider
+            key={sound.id}
+            soundUrl={sound.url}
+            color={sound.color}
+            label={sound.name}
+          />
+        ))}
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <ControlBar />

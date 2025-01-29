@@ -1,7 +1,8 @@
 import { Howl } from "howler";
 import * as React from "react";
+import { AudioEvents } from "~/events/audioEvents";
 
-export function useAudioPlayer(soundUrl: string) {
+export function useAudioPlayer(soundUrl: string, soundId: string) {
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [volume, setVolume] = React.useState(0.5);
 
@@ -36,10 +37,36 @@ export function useAudioPlayer(soundUrl: string) {
   }, [volume]);
 
   React.useEffect(() => {
+    const unsubscribePlay = AudioEvents.subscribe("play", (event) => {
+      if (event.soundId === soundId) {
+        play();
+      }
+    });
+
+    const unsubscribePause = AudioEvents.subscribe("pause", (event) => {
+      if (event.soundId === soundId) {
+        pause();
+      }
+    });
+
+    const unsubscribePauseAll = AudioEvents.subscribe("pauseAll", () => {
+      pause();
+    });
+
+    const unsubscribeVolume = AudioEvents.subscribe("volume", (event) => {
+      if (event.soundId === "global") {
+        setVolume(event.volume);
+      }
+    });
+
     return () => {
       sound.current.unload();
+      unsubscribePlay();
+      unsubscribePause();
+      unsubscribePauseAll();
+      unsubscribeVolume();
     };
-  }, []);
+  }, [soundId]);
 
   return { isPlaying, volume, setVolume, togglePlay };
 }

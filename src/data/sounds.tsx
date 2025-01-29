@@ -1,128 +1,186 @@
-import type { IconType } from "react-icons";
+import { IconType } from "react-icons";
 import {
   TbBug,
+  TbBugFilled,
   TbCampfire,
   TbCircle,
-  TbCircleDot,
+  TbCircleDashed,
+  TbCircleDotted,
+  TbCircleFilled,
   TbDroplet,
   TbFountain,
   TbRipple,
-  TbWind,
+  TbSubmarine,
+  TbSunWind,
 } from "react-icons/tb";
+import { match } from "ts-pattern";
 import { z } from "zod";
 
-const SoundSchema = z.object({
+export const ALL_SOUNDS = {
+  waterfall: {
+    id: "waterfall",
+    urls: ["/sounds/waterfall.mp3", "/sounds/waterfall.ogg"],
+    name: "Waterfall",
+    icon: TbFountain,
+    color: "blue",
+    keywords: [
+      "waterfall",
+      "water",
+      "stream",
+      "river",
+      "creek",
+      "brook",
+      "cascade",
+    ],
+  },
+  whiteRain: {
+    id: "whiteRain",
+    urls: ["/sounds/white-rain.mp3", "/sounds/white-rain.ogg"],
+    name: "Rain",
+    icon: TbDroplet,
+    color: "blue",
+    keywords: [
+      "rain",
+      "storm",
+      "thunder",
+      "lightning",
+      "pouring",
+      "shower",
+      "drizzle",
+    ],
+  },
+  forestWind: {
+    id: "forestWind",
+    urls: ["/sounds/forest-wind.mp3", "/sounds/forest-wind.ogg"],
+    name: "Wind",
+    icon: TbSunWind,
+    color: "green",
+    keywords: ["wind", "breeze", "air", "nature", "forest", "tree"],
+  },
+  underwater: {
+    id: "underwater",
+    urls: ["/sounds/underwater.mp3", "/sounds/underwater.ogg"],
+    name: "Underwater",
+    icon: TbSubmarine,
+    color: "blue",
+    keywords: ["underwater", "aquatic", "marine"],
+  },
+  waves: {
+    id: "waves",
+    urls: ["/sounds/ocean-waves.mp3", "/sounds/ocean-waves.ogg"],
+    name: "Waves",
+    icon: TbRipple,
+    color: "blue",
+    keywords: ["waves", "ocean", "sea", "aquatic", "marine", "aqua", "aquifer"],
+  },
+  campfire: {
+    id: "campfire",
+    urls: ["/sounds/campfire.mp3", "/sounds/campfire.ogg"],
+    name: "Campfire",
+    icon: TbCampfire,
+    color: "red",
+    keywords: [
+      "campfire",
+      "fire",
+      "camp",
+      "camping",
+      "camping",
+      "fireplace",
+      "fire",
+    ],
+  },
+  cicadas: {
+    id: "cicadas",
+    urls: ["/sounds/japanese-cicadas.mp3", "/sounds/japanese-cicadas.ogg"],
+    name: "Cicadas",
+    icon: TbBug,
+    color: "yellow",
+    keywords: [
+      "cicadas",
+      "cicada",
+      "insect",
+      "bug",
+      "nature",
+      "forest",
+      "tree",
+    ],
+  },
+  crickets: {
+    id: "crickets",
+    urls: ["/sounds/crickets.mp3", "/sounds/crickets.ogg"],
+    name: "Crickets",
+    icon: TbBugFilled,
+    color: "yellow",
+    keywords: [
+      "crickets",
+      "cricket",
+      "insect",
+      "bug",
+      "nature",
+      "forest",
+      "tree",
+    ],
+  },
+  whiteNoise: {
+    id: "whiteNoise",
+    urls: ["/sounds/white-noise.mp3", "/sounds/white-noise.ogg"],
+    name: "White Noise",
+    icon: TbCircleDotted,
+    color: "gray",
+    keywords: ["white noise", "white", "sound"],
+  },
+  grayNoise: {
+    id: "grayNoise",
+    urls: ["/sounds/gray-noise.mp3", "/sounds/gray-noise.ogg"],
+    name: "Gray Noise",
+    icon: TbCircleDashed,
+    color: "gray",
+    keywords: ["gray noise", "gray", "sound"],
+  },
+  brownNoise: {
+    id: "brownNoise",
+    urls: ["/sounds/brown-noise.mp3", "/sounds/brown-noise.ogg"],
+    name: "Brown Noise",
+    icon: TbCircle,
+    color: "orange",
+    keywords: ["brown noise", "brown", "sound"],
+  },
+  pinkNoise: {
+    id: "pinkNoise",
+    urls: ["/sounds/pink-noise.mp3", "/sounds/pink-noise.ogg"],
+    name: "Pink Noise",
+    icon: TbCircleFilled,
+    color: "fuchsia",
+    keywords: ["pink noise", "pink", "sound"],
+  },
+};
+export const ALL_SOUNDS_LIST = Object.values(ALL_SOUNDS);
+export type SoundId = keyof typeof ALL_SOUNDS;
+
+export const soundMatcher = (soundId: SoundId) => {
+  return match(soundId)
+    .with("waterfall", () => ALL_SOUNDS.waterfall)
+    .with("whiteRain", () => ALL_SOUNDS.whiteRain)
+    .with("forestWind", () => ALL_SOUNDS.forestWind)
+    .with("underwater", () => ALL_SOUNDS.underwater)
+    .with("waves", () => ALL_SOUNDS.waves)
+    .with("campfire", () => ALL_SOUNDS.campfire)
+    .with("cicadas", () => ALL_SOUNDS.cicadas)
+    .with("crickets", () => ALL_SOUNDS.crickets)
+    .with("whiteNoise", () => ALL_SOUNDS.whiteNoise)
+    .with("grayNoise", () => ALL_SOUNDS.grayNoise)
+    .with("brownNoise", () => ALL_SOUNDS.brownNoise)
+    .with("pinkNoise", () => ALL_SOUNDS.pinkNoise)
+    .exhaustive();
+};
+
+// make a Zod schema for the sound object, as well as a list of sound objects
+export const soundSchema = z.object({
   id: z.string(),
-  url: z.string(),
+  urls: z.array(z.string()),
   name: z.string(),
   icon: z.custom<IconType>(),
   color: z.string(),
   keywords: z.array(z.string()),
 });
-
-const SoundsListSchema = z.array(SoundSchema);
-
-type Sound = z.infer<typeof SoundSchema>;
-
-export const ALL_SOUNDS = {
-  waterfall: {
-    id: "waterfall",
-    url: "/sounds/waterfall.mp3",
-    name: "Waterfall",
-    icon: TbFountain,
-    color: "#60A5FA", // blue-400
-    keywords: ["waterfall", "rushing", "water", "stream", "flow"],
-  },
-  whiteRain: {
-    id: "whiteRain",
-    url: "/sounds/white-rain.mp3",
-    name: "White Rain",
-    icon: TbDroplet,
-    color: "#93C5FD", // blue-300
-    keywords: ["rain", "drizzle", "shower", "precipitation"],
-  },
-  forestWind: {
-    id: "forestWind",
-    url: "/sounds/forest-wind.mp3",
-    name: "Forest Wind",
-    icon: TbWind,
-    color: "#34D399", // emerald-400
-    keywords: ["wind", "breeze", "forest", "leaves", "rustling"],
-  },
-  underwater: {
-    id: "underwater",
-    url: "/sounds/underwater.mp3",
-    name: "Underwater",
-    icon: TbRipple,
-    color: "#38BDF8", // sky-400
-    keywords: ["underwater", "submerged", "diving", "bubbles"],
-  },
-  waves: {
-    id: "waves",
-    url: "/sounds/waves.mp3",
-    name: "Ocean Waves",
-    icon: TbFountain,
-    color: "#2DD4BF", // teal-400
-    keywords: ["waves", "ocean", "sea", "beach", "surf"],
-  },
-  campfire: {
-    id: "campfire",
-    url: "/sounds/campfire.mp3",
-    name: "Campfire",
-    icon: TbCampfire,
-    color: "#FB923C", // orange-400
-    keywords: ["fire", "crackling", "burning", "camp", "warmth"],
-  },
-  cicadas: {
-    id: "cicadas",
-    url: "/sounds/cicadas.mp3",
-    name: "Cicadas",
-    icon: TbBug,
-    color: "#4ADE80", // green-400
-    keywords: ["cicadas", "insects", "summer", "nature"],
-  },
-  crickets: {
-    id: "crickets",
-    url: "/sounds/crickets.mp3",
-    name: "Crickets",
-    icon: TbBug,
-    color: "#86EFAC", // green-300
-    keywords: ["crickets", "insects", "night", "chirping"],
-  },
-  whiteNoise: {
-    id: "whiteNoise",
-    url: "/sounds/white-noise.mp3",
-    name: "White Noise",
-    icon: TbCircle,
-    color: "#E5E7EB", // gray-200
-    keywords: ["white noise", "static", "ambient", "background"],
-  },
-  grayNoise: {
-    id: "grayNoise",
-    url: "/sounds/gray-noise.mp3",
-    name: "Gray Noise",
-    icon: TbCircle,
-    color: "#D1D5DB", // gray-300
-    keywords: ["gray noise", "static", "ambient", "background"],
-  },
-  pinkNoise: {
-    id: "pinkNoise",
-    url: "/sounds/pink-noise.mp3",
-    name: "Pink Noise",
-    icon: TbCircle,
-    color: "#FDA4AF", // rose-300
-    keywords: ["pink noise", "static", "ambient", "background"],
-  },
-  brownNoise: {
-    id: "brownNoise",
-    url: "/sounds/brown-noise.mp3",
-    name: "Brown Noise",
-    icon: TbCircleDot,
-    color: "#92400E", // amber-800
-    keywords: ["brown noise", "static", "ambient", "background"],
-  },
-} as const;
-export const ALL_SOUNDS_LIST = Object.values(ALL_SOUNDS);
-
-export { SoundSchema, SoundsListSchema };
-export type { Sound };
+export const SoundsSchema = z.array(soundSchema);

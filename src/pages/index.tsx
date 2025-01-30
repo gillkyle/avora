@@ -34,7 +34,7 @@ export default function Home() {
 
   return (
     <div
-      className={`${geistSans.variable} ${geistMono.variable} items-center justify-items-center min-h-screen p-4 px-12 font-[family-name:var(--font-geist-sans)] flex flex-col`}
+      className={`${geistSans.variable} ${geistMono.variable} items-center justify-items-center min-h-screen pt-4 pb-2 px-12 font-[family-name:var(--font-geist-sans)] flex flex-col`}
     >
       <nav className="flex w-full justify-between pb-4">
         <div className="text-lg flex items-center gap-2">
@@ -59,7 +59,7 @@ export default function Home() {
           />
         </main>
       </div>
-      <footer className="flex gap-6 flex-wrap items-center justify-center pt-4">
+      <footer className="flex gap-6 flex-wrap items-center justify-center pt-2 w-full">
         <ControlBar
           timer={timer}
           timerStart={timerStart}

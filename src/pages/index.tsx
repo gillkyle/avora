@@ -1,7 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { ControlBar } from "~/components/ControlBar";
-import { SoundSlider } from "~/components/SoundSlider";
-import { ALL_SOUNDS_LIST, SoundId } from "~/data/sounds";
+import { Logo } from "~/components/Logo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,11 +18,14 @@ export default function Home() {
       className={`${geistSans.variable} ${geistMono.variable} items-center justify-items-center min-h-screen p-4 px-12 font-[family-name:var(--font-geist-sans)] flex flex-col`}
     >
       <nav className="flex w-full justify-between pb-4">
-        <div className="text-lg">avora · Sound Machine</div>
+        <div className="text-lg flex items-center gap-2">
+          <Logo />
+          avora · Sound Machine
+        </div>
         <div className="text-lg">Kyle Gill</div>
       </nav>
       <div className="border ring ring-neutral-100 ring-offset-2 shadow-inner rounded-2xl bg-neutral-50 shadow-neutral-200 border-neutral-300 w-full h-full flex flex-1 flex-col">
-        <main className="flex flex-col flex-1 h-full gap-8 row-start-2 items-center sm:items-start">
+        <main className="flex flex-col flex-1 h-full gap-8 row-start-2 justify-center items-center">
           <form className="flex flex-col gap-4">
             <input
               type="text"
@@ -37,9 +39,6 @@ export default function Home() {
               Submit
             </button>
           </form>
-          {ALL_SOUNDS_LIST.map((sound) => (
-            <SoundSlider key={sound.id} soundId={sound.id as SoundId} />
-          ))}
         </main>
       </div>
       <footer className="flex gap-6 flex-wrap items-center justify-center pt-4">

@@ -1,4 +1,4 @@
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import { useState } from "react";
 import {
   TbClock,
@@ -6,14 +6,10 @@ import {
   TbPlayerPlay,
   TbSettings,
 } from "react-icons/tb";
+import { SettingsDialog } from "~/components/SettingsDialog";
+import useDisclosure from "~/hooks/useDisclosure";
+import { useGlobalAudioPlayer } from "~/hooks/useGlobalAudioPlayer";
 import { Timer } from "./Timer";
-
-type ControlBarProps = {
-  isPlaying: boolean;
-  onPlayPause: () => void;
-  onOpenSettings: () => void;
-  currentTime: number;
-};
 
 function formatTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);
@@ -21,14 +17,24 @@ function formatTime(seconds: number): string {
   return `${mins}:${secs.toString().padStart(2, "0")}`;
 }
 
-export function ControlBar({
-  isPlaying,
-  onPlayPause,
-  onOpenSettings,
-  currentTime,
-}: ControlBarProps) {
+export function ControlBar() {
   const [timer, setTimer] = useState<number | null>(null);
   const [timerStart, setTimerStart] = useState<number | null>(null);
+  const [currentTime, setCurrentTime] = useState(0);
+  const { pauseAll, playMultiple, isMuted } = useGlobalAudioPlayer();
+  const [isPlaying, setIsPlaying] = useState(false);
+  const settingsDisclosure = useDisclosure();
+
+  function handlePlayPause() {
+    if (isPlaying) {
+      pauseAll();
+      setIsPlaying(false);
+    } else {
+      // Play all sounds that were previously playing
+      playMultiple(["waterfall", "whiteRain"]); // Example - you might want to track which sounds were playing
+      setIsPlaying(true);
+    }
+  }
 
   function handleSetTimer() {
     setTimer(5000); // 5 seconds in milliseconds
@@ -46,7 +52,7 @@ export function ControlBar({
         bgcolor: "background.paper",
       }}
     >
-      <IconButton onClick={onPlayPause} size="large">
+      <IconButton onClick={handlePlayPause} size="large">
         {isPlaying ? <TbPlayerPause /> : <TbPlayerPlay />}
       </IconButton>
 
@@ -58,9 +64,14 @@ export function ControlBar({
         <TbClock />
       </IconButton>
 
-      <IconButton onClick={onOpenSettings} size="large">
-        <TbSettings />
-      </IconButton>
+      <Button
+        onClick={settingsDisclosure.onOpen}
+        size="large"
+        startIcon={<TbSettings />}
+      >
+        Settings
+      </Button>
+      <SettingsDialog disclosure={settingsDisclosure} />
     </Box>
   );
 }

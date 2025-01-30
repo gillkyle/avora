@@ -32,3 +32,7 @@
 - [Overcode Playlist](https://open.spotify.com/playlist/01qrVrDOcOTTmejj4Z5J72?si=ba7c5d457c4c4d58)
 - [Rapidfire Code Playlist](https://open.spotify.com/playlist/0B1gvFOPg4zSQ9nMOFQ0qH?si=7e3e9be443934372)
 - Raycast focus
+
+## Notes
+
+- logo from [Untitled UI logos](https://www.untitledui.com/logos)

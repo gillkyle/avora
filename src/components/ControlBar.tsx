@@ -1,9 +1,8 @@
 import { Box, Button, IconButton, Typography } from "@mui/material";
-import { useState } from "react";
 import {
-  TbClock,
-  TbPlayerPause,
-  TbPlayerPlay,
+  TbClockHour4,
+  TbPlayerPauseFilled,
+  TbPlayerPlayFilled,
   TbSettings,
 } from "react-icons/tb";
 import { SettingsDialog } from "~/components/SettingsDialog";
@@ -11,35 +10,19 @@ import useDisclosure from "~/hooks/useDisclosure";
 import { useGlobalAudioPlayer } from "~/hooks/useGlobalAudioPlayer";
 import { Timer } from "./Timer";
 
-function formatTime(seconds: number): string {
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins}:${secs.toString().padStart(2, "0")}`;
-}
+const TIMER_SECONDS = 5;
 
-export function ControlBar() {
-  const [timer, setTimer] = useState<number | null>(null);
-  const [timerStart, setTimerStart] = useState<number | null>(null);
-  const [currentTime, setCurrentTime] = useState(0);
-  const { pauseAll, playMultiple, isMuted } = useGlobalAudioPlayer();
-  const [isPlaying, setIsPlaying] = useState(false);
+export function ControlBar({
+  timer,
+  timerStart,
+  setTimer,
+}: {
+  timer: number | null;
+  timerStart: number | null;
+  setTimer: (timer: number) => void;
+}) {
+  const { setGlobalAudioStatus, globalAudioStatus } = useGlobalAudioPlayer();
   const settingsDisclosure = useDisclosure();
-
-  function handlePlayPause() {
-    if (isPlaying) {
-      pauseAll();
-      setIsPlaying(false);
-    } else {
-      // Play all sounds that were previously playing
-      playMultiple(["waterfall", "whiteRain"]); // Example - you might want to track which sounds were playing
-      setIsPlaying(true);
-    }
-  }
-
-  function handleSetTimer() {
-    setTimer(5000); // 5 seconds in milliseconds
-    setTimerStart(Date.now());
-  }
 
   return (
     <Box
@@ -49,19 +32,54 @@ export function ControlBar() {
         gap: 2,
         p: 2,
         borderRadius: 1,
-        bgcolor: "background.paper",
       }}
     >
-      <IconButton onClick={handlePlayPause} size="large">
-        {isPlaying ? <TbPlayerPause /> : <TbPlayerPlay />}
-      </IconButton>
-
-      <Typography sx={{ minWidth: 60 }}>{formatTime(currentTime)}</Typography>
-
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: 99999,
+          backgroundColor: "gray.50",
+          padding: 0.5,
+          border: (theme) => `1px solid ${theme.palette.gray["100"]}`,
+          boxShadow: 2,
+        }}
+      >
+        <IconButton
+          onClick={() =>
+            setGlobalAudioStatus(
+              globalAudioStatus === "muted" ? "unmuted" : "muted"
+            )
+          }
+          sx={{
+            backgroundColor: "background.paper",
+            boxShadow: 2,
+            border: (theme) => `1px solid ${theme.palette.gray["300"]}`,
+            borderRadius: 99999,
+            padding: 1,
+            "&:hover": {
+              backgroundColor: "background.paper",
+              filter: "brightness(0.97)",
+            },
+          }}
+          disableRipple
+        >
+          {globalAudioStatus === "muted" ? (
+            <TbPlayerPlayFilled size={24} />
+          ) : (
+            <TbPlayerPauseFilled size={24} />
+          )}
+        </IconButton>
+      </Box>
       <Timer timer={timer} timerStart={timerStart} />
-
-      <IconButton onClick={handleSetTimer} size="large">
-        <TbClock />
+      <IconButton
+        key={TIMER_SECONDS}
+        onClick={() => setTimer(TIMER_SECONDS)}
+        disableRipple
+      >
+        <TbClockHour4 size={24} />
+        <Typography sx={{ ml: 0.5 }}>{TIMER_SECONDS}s</Typography>
       </IconButton>
 
       <Button

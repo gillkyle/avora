@@ -1,14 +1,13 @@
 import {
+  Box,
   Dialog,
   DialogContent,
   DialogTitle,
   IconButton,
-  Stack,
 } from "@mui/material";
 import { TbX } from "react-icons/tb";
 import { ALL_SOUNDS_LIST, SoundId } from "~/data/sounds";
 import type { DisclosureProps } from "~/hooks/useDisclosure";
-import { useGlobalAudioPlayer } from "~/hooks/useGlobalAudioPlayer";
 import { SoundSlider } from "./SoundSlider";
 
 type SettingsDialogProps = {
@@ -16,20 +15,18 @@ type SettingsDialogProps = {
 };
 
 export function SettingsDialog({ disclosure }: SettingsDialogProps) {
-  const { globalVolume, setVolume } = useGlobalAudioPlayer();
-
   return (
     <Dialog
       open={disclosure.isOpen}
       onClose={disclosure.onClose}
-      maxWidth="sm"
+      maxWidth="xl"
+      keepMounted
       fullWidth
       sx={{
         "& .MuiDialog-paper": {
           borderRadius: "1rem",
           backgroundColor: "neutral.50",
-          border: "1px solid",
-          borderColor: "neutral.300",
+          border: (theme) => `2px solid ${theme.palette.gray["300"]}`,
         },
       }}
     >
@@ -38,13 +35,13 @@ export function SettingsDialog({ disclosure }: SettingsDialogProps) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          pb: 1,
+          pb: 2,
+          fontSize: "xl",
         }}
       >
         Sound Settings
         <IconButton
           onClick={disclosure.onClose}
-          size="small"
           sx={{
             color: "neutral.500",
             "&:hover": { color: "neutral.700" },
@@ -54,11 +51,17 @@ export function SettingsDialog({ disclosure }: SettingsDialogProps) {
         </IconButton>
       </DialogTitle>
       <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <Stack spacing={2}>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)" },
+            gap: 2,
+          }}
+        >
           {ALL_SOUNDS_LIST.map((sound) => (
             <SoundSlider key={sound.id} soundId={sound.id as SoundId} />
           ))}
-        </Stack>
+        </Box>
       </DialogContent>
     </Dialog>
   );

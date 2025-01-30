@@ -1,57 +1,68 @@
-import { z } from "zod";
+import { ALL_SOUNDS_LIST, SoundId } from "~/data/sounds";
 
-const AudioEventSchema = z.object({
-  soundId: z.string(),
-  volume: z.number().min(0).max(1),
-});
+type AudioEventType = "play" | "pause" | "setVolume";
 
-type AudioEventType = z.infer<typeof AudioEventSchema>;
+type AudioEvent = {
+  type: AudioEventType;
+  soundId: SoundId;
+  volume?: number;
+};
 
-type EventCallback = (event: AudioEventType) => void;
+type AudioEventListener = (event: AudioEvent) => void;
 
-export class AudioEvents {
-  private static listeners: Map<string, Set<EventCallback>> = new Map();
+class AudioEventEmitter {
+  private static instance: AudioEventEmitter;
+  private listeners: AudioEventListener[] = [];
 
-  static subscribe(eventName: string, callback: EventCallback): () => void {
-    if (!this.listeners.has(eventName)) {
-      this.listeners.set(eventName, new Set());
+  private constructor() {}
+
+  static getInstance(): AudioEventEmitter {
+    if (!AudioEventEmitter.instance) {
+      AudioEventEmitter.instance = new AudioEventEmitter();
     }
-
-    this.listeners.get(eventName)?.add(callback);
-
-    return () => {
-      this.listeners.get(eventName)?.delete(callback);
-      if (this.listeners.get(eventName)?.size === 0) {
-        this.listeners.delete(eventName);
-      }
-    };
+    return AudioEventEmitter.instance;
   }
 
-  private static emit(eventName: string, event: AudioEventType) {
-    this.listeners.get(eventName)?.forEach((callback) => callback(event));
+  addEventListener(listener: AudioEventListener) {
+    this.listeners.push(listener);
+    return () => this.removeEventListener(listener);
   }
 
-  static playSound(soundId: string) {
-    this.emit("play", { soundId, volume: 1 });
+  removeEventListener(listener: AudioEventListener) {
+    const index = this.listeners.indexOf(listener);
+    if (index > -1) {
+      this.listeners.splice(index, 1);
+    }
   }
 
-  static playMultipleSounds(soundIds: string[]) {
+  emit(event: AudioEvent) {
+    this.listeners.forEach((listener) => listener(event));
+  }
+
+  // Helper methods for common operations
+  playSound(soundId: SoundId) {
+    this.emit({ type: "play", soundId });
+  }
+
+  pauseSound(soundId: SoundId) {
+    this.emit({ type: "pause", soundId });
+  }
+
+  pauseAllSounds() {
+    // loop through all sounds and pause them
+    for (const sound of ALL_SOUNDS_LIST) {
+      this.pauseSound(sound.id as SoundId);
+    }
+  }
+
+  setVolume(soundId: SoundId, volume: number) {
+    this.emit({ type: "setVolume", soundId, volume });
+  }
+
+  // Play multiple sounds at once
+  playMultipleSounds(soundIds: SoundId[]) {
     soundIds.forEach((soundId) => this.playSound(soundId));
   }
-
-  static pauseSound(soundId: string) {
-    this.emit("pause", { soundId, volume: 0 });
-  }
-
-  static pauseAllSounds() {
-    this.emit("pauseAll", { soundId: "all", volume: 0 });
-  }
-
-  static setVolume(volume: number) {
-    this.emit("volume", { soundId: "global", volume });
-  }
-
-  static cleanup() {
-    this.listeners.clear();
-  }
 }
+
+export const audioEvents = AudioEventEmitter.getInstance();

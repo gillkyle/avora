@@ -11,7 +11,8 @@ export function Timer({
   const [currentTime, setCurrentTime] = useState(new Date().getTime());
 
   useInterval(() => {
-    if (timer && timerStart && timerStart + timer * 1000 > currentTime) {
+    // Always update current time while timer is active
+    if (timer && timerStart) {
       setCurrentTime(new Date().getTime());
     }
   }, 1000);
@@ -20,7 +21,16 @@ export function Timer({
     return <div>--:--:--</div>;
   }
 
-  const timeLeft = Math.max(0, timerStart + timer * 1000 - currentTime);
+  // Calculate time left in milliseconds
+  const endTime = timerStart + timer * 1000;
+  const timeLeft = Math.max(0, endTime - currentTime);
+
+  // Only show timer if there's time remaining
+  if (timeLeft === 0) {
+    return <div>00:00:00</div>;
+  }
+
+  // Convert to hours, minutes, seconds
   const hours = Math.floor(timeLeft / (1000 * 60 * 60));
   const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);

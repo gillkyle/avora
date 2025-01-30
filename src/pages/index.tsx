@@ -16,30 +16,33 @@ const geistMono = Geist_Mono({
 export default function Home() {
   return (
     <div
-      className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
+      className={`${geistSans.variable} ${geistMono.variable} items-center justify-items-center min-h-screen p-4 px-12 font-[family-name:var(--font-geist-sans)] flex flex-col`}
     >
-      <nav>
-        <a href="/">avora</a>
+      <nav className="flex w-full justify-between pb-4">
+        <div className="text-lg">avora · Sound Machine</div>
+        <div className="text-lg">Kyle Gill</div>
       </nav>
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <form className="flex flex-col gap-4">
-          <input
-            type="text"
-            placeholder="Enter text..."
-            className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-          />
-          <button
-            type="submit"
-            className="px-4 py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
-          >
-            Submit
-          </button>
-        </form>
-        {ALL_SOUNDS_LIST.map((sound) => (
-          <SoundSlider key={sound.id} soundId={sound.id as SoundId} />
-        ))}
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
+      <div className="border ring ring-neutral-100 ring-offset-2 shadow-inner rounded-2xl bg-neutral-50 shadow-neutral-200 border-neutral-300 w-full h-full flex flex-1 flex-col">
+        <main className="flex flex-col flex-1 h-full gap-8 row-start-2 items-center sm:items-start">
+          <form className="flex flex-col gap-4">
+            <input
+              type="text"
+              placeholder="Enter text..."
+              className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+            />
+            <button
+              type="submit"
+              className="px-4 py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            >
+              Submit
+            </button>
+          </form>
+          {ALL_SOUNDS_LIST.map((sound) => (
+            <SoundSlider key={sound.id} soundId={sound.id as SoundId} />
+          ))}
+        </main>
+      </div>
+      <footer className="flex gap-6 flex-wrap items-center justify-center pt-4">
         <ControlBar />
       </footer>
     </div>

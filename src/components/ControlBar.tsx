@@ -1,5 +1,12 @@
 import { Box, IconButton, Typography } from "@mui/material";
-import { TbPlayerPause, TbPlayerPlay, TbSettings } from "react-icons/tb";
+import { useState } from "react";
+import {
+  TbClock,
+  TbPlayerPause,
+  TbPlayerPlay,
+  TbSettings,
+} from "react-icons/tb";
+import { Timer } from "./Timer";
 
 type ControlBarProps = {
   isPlaying: boolean;
@@ -20,6 +27,14 @@ export function ControlBar({
   onOpenSettings,
   currentTime,
 }: ControlBarProps) {
+  const [timer, setTimer] = useState<number | null>(null);
+  const [timerStart, setTimerStart] = useState<number | null>(null);
+
+  function handleSetTimer() {
+    setTimer(5000); // 5 seconds in milliseconds
+    setTimerStart(Date.now());
+  }
+
   return (
     <Box
       sx={{
@@ -36,6 +51,12 @@ export function ControlBar({
       </IconButton>
 
       <Typography sx={{ minWidth: 60 }}>{formatTime(currentTime)}</Typography>
+
+      <Timer timer={timer} timerStart={timerStart} />
+
+      <IconButton onClick={handleSetTimer} size="large">
+        <TbClock />
+      </IconButton>
 
       <IconButton onClick={onOpenSettings} size="large">
         <TbSettings />

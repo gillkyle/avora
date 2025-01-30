@@ -32,7 +32,7 @@ export function AudioInput({
         value={input}
         onChange={(e) => setInput(e.target.value)}
         placeholder="Brown noise for 5 minutes..."
-        className="flex-grow outline-none px-2"
+        className="flex-grow outline-none px-2 min-w-[275px]"
       />
       <Button type="submit" variant="contained">
         Submit
